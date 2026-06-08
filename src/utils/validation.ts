@@ -194,9 +194,17 @@ export const backupListSchema = z.object({
   sort: z.enum(['date', 'type', 'size']).optional().default('date')
 });
 
+// Identifiant backup : timeshift (2026-06-09_03-00-01), borg (archive::name), snapshot (snap-name)
+const backupIdentifierPattern = /^[a-zA-Z0-9_.:/-]+$/;
+const backupIdentifierSchema = z.string()
+  .min(1)
+  .max(256)
+  .regex(backupIdentifierPattern, 'Identifiant contient des caractères non autorisés')
+  .refine(id => !id.includes('..'), 'Les chemins relatifs (..) ne sont pas autorisés');
+
 export const backupRestoreSchema = z.object({
   type: backupTypeSchema,
-  identifier: z.string().min(1).max(256),
+  identifier: backupIdentifierSchema,
   dry_run: z.boolean().optional().default(false),
   force: z.boolean().optional().default(false),
   partial: safePathSchema.optional(),
