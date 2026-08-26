@@ -288,10 +288,14 @@ function validatePaths(): void {
     { label: 'vm-exec',         path: `${PATHS.VM_CONTROLLER}/vm-exec.sh` },
     { label: 'vm-copy',         path: `${PATHS.VM_CONTROLLER}/vm-copy.sh` },
     { label: 'vm-snapshot',     path: `${PATHS.VM_CONTROLLER}/vm-snapshot.sh` },
-    { label: 'vm-verify',       path: `${PATHS.VM_CONTROLLER}/vm-verify.sh` },
     { label: 'vm-destroy',      path: `${PATHS.VM_CONTROLLER}/vm-destroy.sh` },
     { label: 'vm-export',       path: `${PATHS.VM_CONTROLLER}/vm-export.sh` },
     { label: 'vm-import',       path: `${PATHS.VM_CONTROLLER}/vm-import.sh` },
+    // KVM (clonage / verification)
+    { label: 'vm-verify',       path: `${PATHS.KVM_SCRIPTS}/verify-vm-clone.sh` },
+    { label: 'kvm-clone',       path: `${PATHS.KVM_SCRIPTS}/kvm-clone.sh` },
+    { label: 'kvm-clone-system',path: `${PATHS.KVM_SCRIPTS}/kvm-clone-system.sh` },
+    { label: 'kvm-snapshot',    path: `${PATHS.KVM_SCRIPTS}/kvm-snapshot.sh` },
     // Backup Manager
     { label: 'backup-create',   path: `${PATHS.BACKUP_MANAGER}/backup-create.sh` },
     { label: 'backup-list',     path: `${PATHS.BACKUP_MANAGER}/backup-list.sh` },

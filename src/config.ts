@@ -4,16 +4,40 @@
 
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
+import { existsSync } from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+/**
+ * Racine des scripts bash (vm-controller, backup-manager, kvm).
+ *
+ * Ordre de resolution :
+ *   1. LYRA_SCRIPTS_DIR (variable d'environnement)
+ *   2. /usr/local/lib/lyra/scripts : copie root:root 0755 installee par
+ *      l'installeur Lyra. C'est la SEULE disposition compatible avec des
+ *      regles sudoers NOPASSWD : un script dans $HOME (inscriptible par
+ *      l'utilisateur) donnerait root a n'importe quel processus de son uid.
+ *   3. scripts/ du depot (developpement, sans sudoers).
+ */
+export const SYSTEM_SCRIPTS_DIR = '/usr/local/lib/lyra/scripts';
+
+export function resolveScriptsDir(env: NodeJS.ProcessEnv = process.env): string {
+  const fromEnv = env.LYRA_SCRIPTS_DIR;
+  if (fromEnv && fromEnv.trim()) return resolve(fromEnv);
+  if (existsSync(SYSTEM_SCRIPTS_DIR)) return SYSTEM_SCRIPTS_DIR;
+  return resolve(__dirname, '../scripts');
+}
+
+export const SCRIPTS_DIR = resolveScriptsDir();
+
 // Chemins vers les agents
 export const PATHS = {
-  AGENTS_DIR: resolve(__dirname, '../../'),
-  VM_CONTROLLER: resolve(__dirname, '../../vm-controller'),
-  BACKUP_MANAGER: resolve(__dirname, '../../backup-manager'),
-  KVM_SCRIPTS: resolve(__dirname, '../../../kvm'),
+  SCRIPTS_DIR,
+  AGENTS_DIR: resolve(SCRIPTS_DIR, 'agents'),
+  VM_CONTROLLER: resolve(SCRIPTS_DIR, 'agents/vm-controller'),
+  BACKUP_MANAGER: resolve(SCRIPTS_DIR, 'agents/backup-manager'),
+  KVM_SCRIPTS: resolve(SCRIPTS_DIR, 'kvm'),
   LOG_DIR: '/var/log/mcp-agents',
 } as const;
 

@@ -3,3 +3,4 @@ dist/
 .env
 *.log
 /var/log/mcp-agents/
+.claude-sync/
